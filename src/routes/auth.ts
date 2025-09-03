@@ -241,12 +241,11 @@ router.post("/verify-signup-otp", async (req, res) => {
 
 router.post("/logout", requireAuth, (_req, res) => {
 
-  res.clearCookie("token",{
-    httpOnly:true,
-    secure:true,
-    sameSite:'none',
-    path:'/'
-  });
+  res.clearCookie("token", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+});
   res.json({ message: "Logged out" });
 });
 router.get("/me", requireAuth, async (req: Request, res: Response) => {
