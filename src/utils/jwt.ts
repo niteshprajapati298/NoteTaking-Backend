@@ -1,4 +1,5 @@
-import jwt, { SignOptions, VerifyOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import { StringValue } from "ms";
 
 // Direct environment check
 if (!process.env.JWT_SECRET) {
@@ -8,36 +9,22 @@ if (!process.env.JWT_SECRET) {
 export interface JwtPayload {
   sub: string; 
   email: string;
-  iat?: number;
-  exp?: number;
 }
 
 export function signJwt(payload: JwtPayload): string {
   const secret = process.env.JWT_SECRET!;
-  const expiresIn = process.env.JWT_EXPIRES_IN || "7d";
+  const expiresIn = (process.env.JWT_EXPIRES_IN || "7d") as StringValue;
   
-  const options: SignOptions = {
+  return jwt.sign(payload, secret, { 
     expiresIn,
-    algorithm: 'HS256'
-  };
-  
-  return jwt.sign(payload, secret, options);
+    algorithm: 'HS256' 
+  });
 }
 
 export function verifyJwt(token: string): JwtPayload {
   const secret = process.env.JWT_SECRET!;
   
-  const options: VerifyOptions = {
+  return jwt.verify(token, secret, {
     algorithms: ['HS256']
-  };
-  
-  return jwt.verify(token, secret, options) as JwtPayload;
-}
-
-// Optional: Helper function for creating payloads
-export function createJwtPayload(userId: string, email: string): JwtPayload {
-  return {
-    sub: userId,
-    email: email
-  };
+  }) as JwtPayload;
 }
