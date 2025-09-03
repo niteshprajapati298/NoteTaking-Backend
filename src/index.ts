@@ -9,7 +9,7 @@ const app = express();
 const PORT = 5000;
 import cookieParser from "cookie-parser";
 app.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: ['http://localhost:5173','https://note-taking-web-beta.vercel.app'], 
   credentials: true,
   optionsSuccessStatus: 200
 }));
