@@ -6,6 +6,7 @@ import { emailSchema, otpVerifySchema, signUpSchema } from "../validators/auth";
 import { Otp, OtpDocument } from "../models/Otp";
 import { User, UserDocument } from "../models/User";
 import { requireAuth } from "../middleware/auth";
+import { NONAME } from "dns";
 
 const router = Router();
 
@@ -242,7 +243,12 @@ router.get("/me", requireAuth, async (req: Request, res: Response) => {
 
 
 router.post("/logout", requireAuth, (_req, res) => {
-  res.clearCookie("token");
+
+  res.clearCookie("token",{
+    httpOnly:true,
+    secure:true,
+    sameSite:'none'
+  });
   res.json({ message: "Logged out" });
 });
 router.get("/me", requireAuth, async (req: Request, res: Response) => {
