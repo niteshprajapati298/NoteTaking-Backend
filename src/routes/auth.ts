@@ -249,8 +249,8 @@ router.post("/logout", requireAuth, (_req, res) => {
   res.json({ message: "Logged out" });
 });
 router.get("/me", requireAuth, async (req: Request, res: Response) => {
-  const { sub } = (req as any).user; // sub = user id from JWT
-  const user = await User.findById(sub).select("id email name dateOfBirth");
+  const userId = (req as any).user.id; // 👈 yahaan id lo, sub nahi
+  const user = await User.findById(userId).select("id email name dateOfBirth");
 
   if (!user) {
     return res.status(404).json({ error: "User not found" });
@@ -258,6 +258,7 @@ router.get("/me", requireAuth, async (req: Request, res: Response) => {
 
   res.json({ user });
 });
+
 
 
 export default router;
