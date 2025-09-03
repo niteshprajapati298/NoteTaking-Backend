@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// --- Create Note Schema ---
 declare global {
   namespace Express {
     interface UserPayload {
@@ -20,7 +19,7 @@ export const createNoteSchema = z.object({
 });
 export type CreateNoteInput = z.infer<typeof createNoteSchema>;
 
-// --- Delete Note Schema ---
+
 export const deleteNoteSchema = z.object({
   id: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid note ID"), // Mongoose ObjectId
 });

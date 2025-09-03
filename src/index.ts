@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import noteRouter from "./routes/note";
 import cors from 'cors'
 
+
 const app = express();
 const PORT = 5000;
 import cookieParser from "cookie-parser";

@@ -1,4 +1,4 @@
-// validators/auth.ts
+
 import { z } from "zod";
 
 export const emailSchema = z.object({

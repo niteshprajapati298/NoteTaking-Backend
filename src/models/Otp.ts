@@ -25,8 +25,8 @@ const otpSchema = new Schema<OtpDocument>({
   createdAt: { type: Date, default: Date.now }
 });
 
-// Index for automatic expiry
+
 otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-// Export the model
+
 export const Otp = model<OtpDocument>("Otp", otpSchema);

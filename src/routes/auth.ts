@@ -12,8 +12,8 @@ const router = Router();
 function setAuthCookie(res: Response, token: string) {
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false, 
-    sameSite: "lax",
+    secure: true, 
+    sameSite: "none",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 }
@@ -134,7 +134,6 @@ router.post("/verify-login-otp", async (req, res) => {
 
     const { email, code } = parsed.data;
     
-    // Find OTP
     const otpRecord: OtpDocument | null = await Otp.findOne({ email, code });
     if (!otpRecord) {
       return res.status(400).json({ error: "Invalid or expired OTP" });
@@ -190,7 +189,6 @@ router.post("/verify-signup-otp", async (req, res) => {
       return res.status(400).json({ error: "Invalid or expired OTP" });
     }
 
-    // Check if OTP is expired
     if (otpRecord.expiresAt < new Date()) {
       await Otp.deleteMany({ email });
       return res.status(400).json({ error: "OTP has expired" });
