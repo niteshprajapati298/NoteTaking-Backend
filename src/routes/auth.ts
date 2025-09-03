@@ -236,10 +236,7 @@ router.post("/verify-signup-otp", async (req, res) => {
 });
 
 
-router.get("/me", requireAuth, async (req: Request, res: Response) => {
-  const user = (req as any).user;
-  res.json({ user });
-});
+
 
 
 router.post("/logout", requireAuth, (_req, res) => {
@@ -247,7 +244,8 @@ router.post("/logout", requireAuth, (_req, res) => {
   res.clearCookie("token",{
     httpOnly:true,
     secure:true,
-    sameSite:'none'
+    sameSite:'none',
+    path:'/'
   });
   res.json({ message: "Logged out" });
 });
