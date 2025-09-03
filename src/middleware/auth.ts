@@ -1,7 +1,19 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+// Extend Express Request interface
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+        email: string;
+      };
+    }
+  }
+}
 
+// Fail fast if JWT_SECRET is missing
 if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET is not set in environment variables");
 }
@@ -22,7 +34,12 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 
     req.user = { id: payload.sub, email: payload.email };
     next();
-  } catch (e) {
-    return res.status(401).json({ error: "Invalid or expired token" });
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ error: "Token expired" });
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+    return res.status(401).json({ error: "Authentication failed" });
   }
 }
